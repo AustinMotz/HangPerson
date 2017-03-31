@@ -25,8 +25,6 @@ import javax.swing.JFileChooser;
 
 import javax.swing.border.EmptyBorder;
 
-import SearchEngine;
-
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
