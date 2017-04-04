@@ -15,6 +15,7 @@ public class HangPerson {
 	private static JFrame window = new JFrame();
 	private static JPanel panel = new JPanel();
 	private static JButton enter = new JButton("Enter");
+	private static JButton alphabet = new JButton();
 	private static JFormattedTextField input = new JFormattedTextField("");
 	private static JLabel info = new JLabel("Info: ");
 	
@@ -26,7 +27,7 @@ public class HangPerson {
 		inputs();
 		labels();
 		info.getText();
-		info.setText("RRRRRR");
+		info.setText("Hang Person!");
 	}
 
 	private static void windowSetUp(){
@@ -53,14 +54,19 @@ public class HangPerson {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(enter.isEnabled())
-					System.out.println("YAY");
+					findBestFamily();
 				
-			}});
+			}
 	}
 	
+		private void findBestFamily() {
+			// TODO Auto-generated method stub
+			
+		}});
+		
 	private static void inputs() {
 		input.setEditable(true);
-		input.setBounds(25, window.getHeight() - 100, 200, 50);
+		input.setBounds(10, window.getHeight() - 100, 200, 50);
 		panel.add(input);
 		
 	}
