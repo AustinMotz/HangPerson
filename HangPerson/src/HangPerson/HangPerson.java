@@ -15,9 +15,12 @@ public class HangPerson {
 	private static JFrame window = new JFrame();
 	private static JPanel panel = new JPanel();
 	private static JButton enter = new JButton("Enter");
-	private static JButton alphabet = new JButton();
+	private static JButton A = new JButton("A");
 	private static JFormattedTextField input = new JFormattedTextField("");
 	private static JLabel info = new JLabel("Info: ");
+	private static ArrayList<String> remaining = new ArrayList<String>();
+	
+	private static JButton a = new JButton("A");
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -26,6 +29,7 @@ public class HangPerson {
 		buttons();
 		inputs();
 		labels();
+		letters(a, 200, 200);
 		info.getText();
 		info.setText("Hang Person!");
 	}
@@ -45,6 +49,22 @@ public class HangPerson {
 		panel.add(info);
 	}
 	
+	private static void letters(JButton letter, int x, int y){
+		letter.setBounds(x, y, 50, 50);
+		panel.add(letter);
+		letter.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(letter.isEnabled()){
+					findBestFamily(letter.getText());
+				}
+				
+			}
+			
+		});
+	}
+	
 	private static void buttons(){
 		
 		enter.setBounds(window.getWidth() - 160, window.getHeight() - 110, 100, 50);
@@ -53,16 +73,18 @@ public class HangPerson {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(enter.isEnabled())
-					findBestFamily();
+				if(enter.isEnabled()){
+					
+				}
 				
-			}
+			}});
 	}
 	
-		private void findBestFamily() {
-			// TODO Auto-generated method stub
-			
-		}});
+	private static ArrayList<String> findBestFamily(String letter) {
+		HashMap<String, ArrayList<String>> families = new HashMap<String, ArrayList<String>>();
+		
+		return null;
+	}
 		
 	private static void inputs() {
 		input.setEditable(true);
