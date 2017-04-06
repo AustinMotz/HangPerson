@@ -38,7 +38,6 @@ public class HangPerson {
 	
 	
 	public static void main(String[] args) throws Exception {
-		getDictionary();
 		windowSetUp();
 		buttons();
 		inputs();
@@ -104,7 +103,7 @@ public class HangPerson {
 						lose();
 					} else {
 					updateMan();
-					findBestFamily(letter.getText());
+					remaining = findBestFamily(letter.getText());
 					panel.remove(letter);
 					remain.setText("You have " + (maxTries - attempt) + " tries left");					
 					window.revalidate();
@@ -153,6 +152,11 @@ public class HangPerson {
 					letters();
 					window.revalidate();
 					window.repaint();
+					try {
+						remaining = getDictionary(wordLength);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					
 				}
 				
@@ -161,8 +165,22 @@ public class HangPerson {
 	
 	private static ArrayList<String> findBestFamily(String letter) {
 		HashMap<String, ArrayList<String>> families = new HashMap<String, ArrayList<String>>();
-		
-		return null;
+		String pattern = "";
+		String bestKey = "";
+		for(String guess: remaining){
+			pattern = toPattern(guess, letter);
+			ArrayList<String> value;
+			if(families.containsKey(pattern)){
+				value = (ArrayList<String>)families.get(pattern);
+			} else {
+				value = new ArrayList<String>();
+			}
+			value.add(guess);
+			families.put(pattern, value);
+			bestKey = pattern;
+		}
+		word.setText(bestKey);
+		return families.get(bestKey);
 	}
 		
 	private static void inputs() {
@@ -175,12 +193,24 @@ public class HangPerson {
 
 	}
 	
-	private static ArrayList<String> getDictionary() throws Exception{
+	private static String toPattern(String word, String letter){
+		String pattern = "";
+		for(int i = 0; i < word.length(); i++) {
+			if(word.substring(i,i+1).equals(letter))
+				pattern += letter;
+			else
+				pattern += "_";	
+		}
+		return pattern;
+	}
+	
+	private static ArrayList<String> getDictionary(int length) throws Exception{
 		Scanner dictionary = new Scanner(new File("Dictionary.txt"));
 		ArrayList<String> words = new ArrayList<String>();
 		
 		while(dictionary.hasNext()) {
-			words.add(dictionary.nextLine());
+			if(dictionary.nextLine().length() == length)
+				words.add(dictionary.nextLine());
 		}
 		return words;
 	}
