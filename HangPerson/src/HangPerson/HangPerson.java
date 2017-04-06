@@ -107,11 +107,12 @@ public class HangPerson {
 					} else {
 					updateMan();
 					lettersLeft.remove(letter.getText());
+					panel.remove(letter);
 					remaining = findBestFamily(letter.getText().toLowerCase());
 					if(word.getText().contains(letter.getText().toLowerCase()))
 						attempt++;
 					remain.setText("You have " + (maxTries - attempt) + " tries left");
-					panel.remove(letter);
+					
 					window.revalidate();
 					window.repaint();
 					}
@@ -185,7 +186,6 @@ public class HangPerson {
 			value.add(guess);
 			families.put(pattern, value);
 		}
-		System.out.println(families.keySet());
 		bestKey = findFamilies(families);
 		word.setText(bestKey);
 		return families.get(bestKey);
@@ -199,7 +199,6 @@ public class HangPerson {
 			
 			for(String letter: lettersLeft) {
 				String pattern = toPattern(key, letter);
-				System.out.println(pattern);
 				if(!patterns.contains(pattern))
 					patterns.add(pattern);
 			}
@@ -208,7 +207,7 @@ public class HangPerson {
 				bestKey = key;				
 			}
 			patterns.clear();
-			//System.out.println(bestKey);
+			System.out.println("BestKey: "+bestKey);
 		}
 		return bestKey;
 	}
@@ -232,7 +231,8 @@ public class HangPerson {
 				pattern += "_ ";	
 		}
 		String endPattern = "";
-		for(int i = 0; i < pattern.length()-1; i++){
+		System.out.println(pattern + "" + pattern.length());
+		for(int i = 0; i < pattern.length(); i++){
 			if(word.getText().charAt(i) != pattern.charAt(i))
 				endPattern += word.getText().charAt(i);
 			else
