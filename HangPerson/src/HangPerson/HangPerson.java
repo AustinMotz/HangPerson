@@ -39,14 +39,14 @@ public class HangPerson {
 	
 	
 	public static void main(String[] args) throws Exception {
-		//windowSetUp();
-		//buttons();
-		//inputs();
-		//labels();
-		//photos();
-		remaining = getDictionary(4);
-		System.out.println(remaining);
-		System.out.println(findBestFamily("9"));
+		windowSetUp();
+		buttons();
+		inputs();
+		labels();
+		photos();
+		//remaining = getDictionary(4);
+		//System.out.println(remaining);
+		//System.out.println(findBestFamily("f"));
 		
 		
 		//info.getText();
@@ -110,7 +110,8 @@ public class HangPerson {
 					remaining = findBestFamily(letter.getText().toLowerCase());
 					if(word.getText().contains(letter.getText().toLowerCase()))
 						attempt++;
-					remain.setText("You have " + (maxTries - attempt) + " tries left");					
+					remain.setText("You have " + (maxTries - attempt) + " tries left");
+					panel.remove(letter);
 					window.revalidate();
 					window.repaint();
 					}
@@ -131,8 +132,9 @@ public class HangPerson {
 	private static void buttons(){
 		
 		enter.setBounds(window.getWidth() - 160, window.getHeight() - 110, 100, 50);
-		
 		panel.add(enter);
+		
+		
 		enter.addActionListener(new ActionListener(){
 
 			@Override
@@ -183,6 +185,7 @@ public class HangPerson {
 			value.add(guess);
 			families.put(pattern, value);
 		}
+		System.out.println(families.keySet());
 		bestKey = findFamilies(families);
 		word.setText(bestKey);
 		return families.get(bestKey);
@@ -190,10 +193,13 @@ public class HangPerson {
 	private static String findFamilies(HashMap<String, ArrayList<String>> families){
 		String bestKey= "";
 		int highest = 0;
+		ArrayList<String> patterns = new ArrayList<String>();
+		System.out.println(lettersLeft);
 		for(String key: families.keySet()){
-			ArrayList<String> patterns = new ArrayList<String>();
+			
 			for(String letter: lettersLeft) {
 				String pattern = toPattern(key, letter);
+				System.out.println(pattern);
 				if(!patterns.contains(pattern))
 					patterns.add(pattern);
 			}
@@ -201,6 +207,8 @@ public class HangPerson {
 				highest = patterns.size();
 				bestKey = key;				
 			}
+			patterns.clear();
+			//System.out.println(bestKey);
 		}
 		return bestKey;
 	}
@@ -215,15 +223,22 @@ public class HangPerson {
 
 	}
 	
-	private static String toPattern(String word, String letter){
+	private static String toPattern(String convert, String letter){
 		String pattern = "";
-		for(int i = 0; i < word.length(); i++) {
-			if((""+word.charAt(i)).equals(letter.toLowerCase()))
+		for(int i = 0; i < convert.length(); i++) {
+			if((""+convert.charAt(i)).equals(letter.toLowerCase()))
 				pattern += letter + " ";
 			else
 				pattern += "_ ";	
 		}
-		return pattern;
+		String endPattern = "";
+		for(int i = 0; i < pattern.length()-1; i++){
+			if(word.getText().charAt(i) != pattern.charAt(i))
+				endPattern += word.getText().charAt(i);
+			else
+				endPattern += pattern.charAt(i);
+		}
+		return endPattern;
 	}
 	
 	private static ArrayList<String> getDictionary(int length) throws Exception{
@@ -235,6 +250,10 @@ public class HangPerson {
 			if(words.get(words.size()-1).length() != length)
 				words.remove(words.size()-1);
 		}
+		String start = "";
+		for(int i = 0; i < length; i++)
+			start += "_ ";
+		word.setText(start);
 		return words;
 	}
 	private static void lose(){
