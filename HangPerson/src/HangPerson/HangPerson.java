@@ -26,6 +26,7 @@ public class HangPerson {
 
 	
 	private static ArrayList<String> remaining = new ArrayList<String>();
+	private static ArrayList<String> lettersLeft = new ArrayList<String>();
 	
 	
 	private static int attempt = 0;
@@ -38,12 +39,14 @@ public class HangPerson {
 	
 	
 	public static void main(String[] args) throws Exception {
-		windowSetUp();
-		buttons();
-		inputs();
-		labels();
-		photos();
-		System.out.println(findBestFamily("H"));
+		//windowSetUp();
+		//buttons();
+		//inputs();
+		//labels();
+		//photos();
+		remaining = getDictionary(4);
+		System.out.println(remaining);
+		System.out.println(findBestFamily("9"));
 		
 		
 		//info.getText();
@@ -82,7 +85,9 @@ public class HangPerson {
 			for(int row = 0; row < maxRow; row++){
 				if(row + col*maxRow < 26){
 					alphabet[row + col*maxRow] = new JButton((char)(65 + row + col*maxRow) + "");
+					lettersLeft.add((char)(65 + row + col*maxRow) + "");
 					letterSetUp(alphabet[row + col*maxRow], marginX+space*row, marginY+space*col);
+					
 					}
 				}
 	}
@@ -97,13 +102,14 @@ public class HangPerson {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(letter.isEnabled()){
-					attempt++;
 					if(maxTries - attempt <= 0){
 						lose();
 					} else {
 					updateMan();
-					//remaining = findBestFamily(letter.getText().toLowerCase());
-					panel.remove(letter);
+					lettersLeft.remove(letter.getText());
+					remaining = findBestFamily(letter.getText().toLowerCase());
+					if(word.getText().contains(letter.getText().toLowerCase()))
+						attempt++;
 					remain.setText("You have " + (maxTries - attempt) + " tries left");					
 					window.revalidate();
 					window.repaint();
@@ -177,8 +183,26 @@ public class HangPerson {
 			value.add(guess);
 			families.put(pattern, value);
 		}
+		bestKey = findFamilies(families);
 		word.setText(bestKey);
 		return families.get(bestKey);
+	}
+	private static String findFamilies(HashMap<String, ArrayList<String>> families){
+		String bestKey= "";
+		int highest = 0;
+		for(String key: families.keySet()){
+			ArrayList<String> patterns = new ArrayList<String>();
+			for(String letter: lettersLeft) {
+				String pattern = toPattern(key, letter);
+				if(!patterns.contains(pattern))
+					patterns.add(pattern);
+			}
+			if(patterns.size()>highest) {
+				highest = patterns.size();
+				bestKey = key;				
+			}
+		}
+		return bestKey;
 	}
 		
 	private static void inputs() {
@@ -207,8 +231,9 @@ public class HangPerson {
 		ArrayList<String> words = new ArrayList<String>();
 		
 		while(dictionary.hasNext()) {
-			if(dictionary.nextLine().length() == length)
-				words.add(dictionary.nextLine());
+			words.add(dictionary.nextLine());
+			if(words.get(words.size()-1).length() != length)
+				words.remove(words.size()-1);
 		}
 		return words;
 	}
@@ -216,7 +241,7 @@ public class HangPerson {
 		panel.removeAll();
 		attempt = 26;
 		updateMan();
-		end.setText("YOU LOSE!");
+		end.setText("TAKE THE L!");
 		end.setBounds(300, 50, 300, 300);
 		word.setBounds(200, 250, 200, 50);
 		panel.add(end);
