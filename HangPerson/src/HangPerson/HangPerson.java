@@ -42,9 +42,8 @@ public class HangPerson {
 		buttons();
 		inputs();
 		labels();
-		
 		photos();
-		
+		System.out.println(findBestFamily("H"));
 		
 		
 		//info.getText();
@@ -103,7 +102,7 @@ public class HangPerson {
 						lose();
 					} else {
 					updateMan();
-					remaining = findBestFamily(letter.getText());
+					//remaining = findBestFamily(letter.getText().toLowerCase());
 					panel.remove(letter);
 					remain.setText("You have " + (maxTries - attempt) + " tries left");					
 					window.revalidate();
@@ -177,7 +176,6 @@ public class HangPerson {
 			}
 			value.add(guess);
 			families.put(pattern, value);
-			bestKey = pattern;
 		}
 		word.setText(bestKey);
 		return families.get(bestKey);
@@ -196,10 +194,10 @@ public class HangPerson {
 	private static String toPattern(String word, String letter){
 		String pattern = "";
 		for(int i = 0; i < word.length(); i++) {
-			if(word.substring(i,i+1).equals(letter))
-				pattern += letter;
+			if((""+word.charAt(i)).equals(letter.toLowerCase()))
+				pattern += letter + " ";
 			else
-				pattern += "_";	
+				pattern += "_ ";	
 		}
 		return pattern;
 	}
