@@ -8,49 +8,49 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
 
 public class HangPerson {
 
-	private static JFrame 				window	= new JFrame();
-	private static JPanel 				panel 	= new JPanel();
-	private static JButton				enter	= new JButton("Enter");
-	private static JFormattedTextField 	tries 	= new JFormattedTextField("Tries");
-	private static JFormattedTextField 	length 	= new JFormattedTextField("Length");
-	private static JFormattedTextField 	word 	= new JFormattedTextField("");
-	private static JFormattedTextField  remain  = new JFormattedTextField("");
-	private static JLabel 				info	= new JLabel("Info: Enter your word length and guesses!");
-	private static JLabel 				end		= new JLabel("");
+	private static JFrame 				window;
+	private static JPanel 				panel;
+	private static JButton				enter;
+	private static JFormattedTextField 	tries;
+	private static JFormattedTextField 	length;
+	private static JFormattedTextField 	word;
+	private static JFormattedTextField  remain;
+	private static JLabel 				info;
+	private static JLabel 				end;
+	private static JButton				play;
 
 	
-	private static ArrayList<String> remaining = new ArrayList<String>();
-	private static ArrayList<String> lettersLeft = new ArrayList<String>();
+	private static ArrayList<String> remaining;
+	private static ArrayList<String> lettersLeft;
 	
 	
-	private static int attempt = 0;
+	private static int attempt;
 	private static int maxTries;
 	private static int wordLength;
-	private static JButton[] alphabet = new JButton[26];
-	private static ImageIcon man = new ImageIcon("Images\\hangman"+attempt+".png");
-	private static JLabel LMan = new JLabel(man);
+	private static JButton[] alphabet;
+	private static ImageIcon man;
+	private static JLabel LMan;
 	
 	
 	
 	public static void main(String[] args) throws Exception {
+		play();
+	}
+	
+	public static void play() throws Exception {
+		
 		windowSetUp();
 		buttons();
 		inputs();
 		labels();
 		photos();
-		//remaining = getDictionary(4);
-		//System.out.println(remaining);
-		//System.out.println(findBestFamily("f"));
-		
-		
-		//info.getText();
-		//info.setText("Hang Person!");
 	}
 	
 	private static void photos() throws Exception {
@@ -61,6 +61,28 @@ public class HangPerson {
 	}
 
 	private static void windowSetUp(){
+		
+		window	= new JFrame();
+		panel 	= new JPanel();
+		enter	= new JButton("Enter");
+		tries 	= new JFormattedTextField("Tries");
+		length 	= new JFormattedTextField("Length");
+		word 	= new JFormattedTextField("");
+		remain  = new JFormattedTextField("");
+		info	= new JLabel("Info: Enter your word length and guesses!");
+		end		= new JLabel("");
+		play	= new JButton("Play Again!");
+
+		
+		remaining = new ArrayList<String>();
+		lettersLeft = new ArrayList<String>();
+		
+		
+		attempt = 0;
+		alphabet = new JButton[26];
+		man = new ImageIcon("Images\\hangman"+attempt+".png");
+		LMan = new JLabel(man);
+		
 		window.setTitle("Hang Person");
 		window.pack();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -68,6 +90,10 @@ public class HangPerson {
 		window.setSize(700, 500);
 		panel.setLayout(null);
 		window.add(panel);
+		panel.removeAll();
+		panel.repaint();
+		panel.revalidate();
+		attempt = 0;
 	}
 	
 	private static void labels(){
@@ -233,6 +259,8 @@ public class HangPerson {
 	}
 		
 	private static void inputs() {
+		tries.setText("tries");
+		length.setText("length");
 		tries.setEditable(true);
 		length.setEditable(true);
 		tries.setBounds(410, window.getHeight() - 110, 50, 50);
@@ -270,12 +298,36 @@ public class HangPerson {
 		return words;
 	}
 	
+	private static void again(){
+		play.setBounds(250, 300, 100, 50);
+		panel.add(play);
+		
+		
+		play.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(enter.isEnabled()){
+					window.dispose();
+					try {
+						play();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}});
+	}
+	
 	private static void win(){
 		panel.removeAll();
 		updateMan();
 		end.setText("You Win!");
 		end.setBounds(300, 50, 300, 300);
 		word.setBounds(200, 250, 200, 50);
+		again();
+		
 		panel.add(end);
 		panel.add(word);
 		window.revalidate();
@@ -286,7 +338,8 @@ public class HangPerson {
 		panel.removeAll();
 		attempt = 26;
 		updateMan();
-		word.setText(remaining.get(0));
+		again();
+		word.setText(remaining.get((int)(Math.random()*remaining.size())));
 		end.setText("TAKE THE L!");
 		end.setBounds(300, 50, 300, 300);
 		word.setBounds(200, 250, 200, 50);
