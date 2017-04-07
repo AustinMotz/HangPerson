@@ -112,7 +112,7 @@ public class HangPerson {
 					remain.setText("You have " + (maxTries - attempt) + " tries left");
 					if(maxTries - attempt <= 0)
 						lose();
-					else if(remaining.size() == 1)
+					else if(remaining.size() == 1) //ToDo fix the win
 						win();
 					window.revalidate();
 					window.repaint();
