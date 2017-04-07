@@ -102,20 +102,21 @@ public class HangPerson {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(letter.isEnabled()){
-					if(maxTries - attempt <= 0){
-						lose();
-					} else {
-					updateMan();
 					lettersLeft.remove(letter.getText());
 					panel.remove(letter);
 					remaining = findBestFamily(letter.getText().toLowerCase());
-					if(word.getText().contains(letter.getText().toLowerCase()))
+					System.out.println(remaining);
+					if(!word.getText().contains(letter.getText().toLowerCase()))
 						attempt++;
+					updateMan();
 					remain.setText("You have " + (maxTries - attempt) + " tries left");
-					
+					if(maxTries - attempt <= 0)
+						lose();
+					else if(remaining.size() == 1)
+						win();
 					window.revalidate();
 					window.repaint();
-					}
+					
 				}}});
 	}
 	
@@ -225,20 +226,15 @@ public class HangPerson {
 	private static String toPattern(String convert, String letter){
 		String pattern = "";
 		for(int i = 0; i < convert.length(); i++) {
-			if((""+convert.charAt(i)).equals(letter.toLowerCase()))
-				pattern += letter + " ";
+			//if((""+convert.charAt(i)).equals(letter.toLowerCase()))
+			//System.out.println(lettersLeft);
+			if(lettersLeft.contains((""+convert.charAt(i)).toUpperCase()))
+				pattern += "_ ";
 			else
-				pattern += "_ ";	
+				pattern += convert.charAt(i) + " ";
+					
 		}
-		String endPattern = "";
-		System.out.println(pattern + "" + pattern.length());
-		for(int i = 0; i < pattern.length(); i++){
-			if(word.getText().charAt(i) != pattern.charAt(i))
-				endPattern += word.getText().charAt(i);
-			else
-				endPattern += pattern.charAt(i);
-		}
-		return endPattern;
+		return pattern;
 	}
 	
 	private static ArrayList<String> getDictionary(int length) throws Exception{
@@ -256,6 +252,19 @@ public class HangPerson {
 		word.setText(start);
 		return words;
 	}
+	
+	private static void win(){
+		panel.removeAll();
+		updateMan();
+		end.setText("You Win!");
+		end.setBounds(300, 50, 300, 300);
+		word.setBounds(200, 250, 200, 50);
+		panel.add(end);
+		panel.add(word);
+		window.revalidate();
+		window.repaint();
+	}
+	
 	private static void lose(){
 		panel.removeAll();
 		attempt = 26;
