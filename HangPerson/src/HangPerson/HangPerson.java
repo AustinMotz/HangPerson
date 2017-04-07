@@ -105,14 +105,14 @@ public class HangPerson {
 					lettersLeft.remove(letter.getText());
 					panel.remove(letter);
 					remaining = findBestFamily(letter.getText().toLowerCase());
-					System.out.println(remaining);
+					//System.out.println(remaining);
 					if(!word.getText().contains(letter.getText().toLowerCase()))
 						attempt++;
 					updateMan();
 					remain.setText("You have " + (maxTries - attempt) + " tries left");
 					if(maxTries - attempt <= 0)
 						lose();
-					else if(remaining.size() == 1) //ToDo fix the win
+					else if(!word.getText().contains("_"))
 						win();
 					window.revalidate();
 					window.repaint();
@@ -187,18 +187,27 @@ public class HangPerson {
 			value.add(guess);
 			families.put(pattern, value);
 		}
-		bestKey = findFamilies(families);
+		bestKey = findFamilies(families, letter);
 		word.setText(bestKey);
 		return families.get(bestKey);
 	}
-	private static String findFamilies(HashMap<String, ArrayList<String>> families){
+	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
 		String bestKey= "";
 		int highest = 0;
 		ArrayList<String> patterns = new ArrayList<String>();
-		System.out.println(lettersLeft);
+		
 		for(String key: families.keySet()){
 			
-			for(String letter: lettersLeft) {
+			if(families.get(key).size()>highest){
+				bestKey = key;
+				highest = families.get(key).size();
+			} else if(families.get(key).size()==highest) {
+				if(!key.contains(letter)){
+					bestKey = key;
+				}
+			}
+			
+			/*for(String letter: lettersLeft) {
 				String pattern = toPattern(key, letter);
 				if(!patterns.contains(pattern))
 					patterns.add(pattern);
@@ -206,9 +215,19 @@ public class HangPerson {
 			if(patterns.size()>highest) {
 				highest = patterns.size();
 				bestKey = key;				
+			} else if(patterns.size() == highest) {
+				boolean contain = false;
+				for(String let: lettersLeft) {
+					if(key.contains(let))
+						contain = false;
+				}
+				if(!contain)
+					highest = patterns.size();
+				bestKey = key;
 			}
+			System.out.println("Key: "+ key + "patterns: "+patterns);
 			patterns.clear();
-			System.out.println("BestKey: "+bestKey);
+			*/
 		}
 		return bestKey;
 	}
@@ -226,8 +245,6 @@ public class HangPerson {
 	private static String toPattern(String convert, String letter){
 		String pattern = "";
 		for(int i = 0; i < convert.length(); i++) {
-			//if((""+convert.charAt(i)).equals(letter.toLowerCase()))
-			//System.out.println(lettersLeft);
 			if(lettersLeft.contains((""+convert.charAt(i)).toUpperCase()))
 				pattern += "_ ";
 			else
@@ -269,6 +286,7 @@ public class HangPerson {
 		panel.removeAll();
 		attempt = 26;
 		updateMan();
+		word.setText(remaining.get(0));
 		end.setText("TAKE THE L!");
 		end.setBounds(300, 50, 300, 300);
 		word.setBounds(200, 250, 200, 50);
