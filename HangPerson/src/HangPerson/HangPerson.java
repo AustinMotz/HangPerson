@@ -217,46 +217,6 @@ public class HangPerson {
 		word.setText(bestKey);
 		return families.get(bestKey);
 	}
-	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
-		String bestKey= "";
-		int highest = 0;
-		ArrayList<String> patterns = new ArrayList<String>();
-		
-		for(String key: families.keySet()){
-			
-			if(families.get(key).size()>highest){
-				bestKey = key;
-				highest = families.get(key).size();
-			} else if(families.get(key).size()==highest) {
-				if(!key.contains(letter)){
-					bestKey = key;
-				}
-			}
-			
-			/*for(String letter: lettersLeft) {
-				String pattern = toPattern(key, letter);
-				if(!patterns.contains(pattern))
-					patterns.add(pattern);
-			}
-			if(patterns.size()>highest) {
-				highest = patterns.size();
-				bestKey = key;				
-			} else if(patterns.size() == highest) {
-				boolean contain = false;
-				for(String let: lettersLeft) {
-					if(key.contains(let))
-						contain = false;
-				}
-				if(!contain)
-					highest = patterns.size();
-				bestKey = key;
-			}
-			System.out.println("Key: "+ key + "patterns: "+patterns);
-			patterns.clear();
-			*/
-		}
-		return bestKey;
-	}
 		
 	private static void inputs() {
 		tries.setText("tries");
@@ -347,5 +307,9 @@ public class HangPerson {
 		panel.add(word);
 		window.revalidate();
 		window.repaint();
+	}
+	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
+		
+		return null;
 	}
 }
