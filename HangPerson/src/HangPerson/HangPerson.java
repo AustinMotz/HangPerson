@@ -321,11 +321,29 @@ public class HangPerson {
 	}
 	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
 		String bestPattern = "";
-		int highestNum = 0;
-		for(String pattern: families.keySet()) {
-			ArrayList<String> tempRemaining = (ArrayList<String>) lettersLeft.clone();
-			
+		int highest = 0;
+		double highestAvg = 0;
+		for(String key: families.keySet()) {
+			HashMap<String, Integer> lettersContained = new HashMap<String, Integer>();
+			int numKeys = 0;
+			int numWords = 0;
+			for(String value: families.get(key)) {
+				numWords++;
+				for(int i = 0; i < value.length(); i++) {
+					if(lettersContained.containsKey(""+value.charAt(i)))
+						lettersContained.put(""+value.charAt(i),lettersContained.get(""+value.charAt(i)));
+					else{
+						lettersContained.put(""+value.charAt(i),0);
+						numKeys++;
+					}
+				}
+			}
+			if(numKeys > highest || (numKeys == highest && highestAvg < (double)numKeys/numWords)){
+				bestPattern = key;
+				highest = numKeys;
+				highestAvg = (double)numKeys/numWords;
+			}
 		}
-		return null;
+		return bestPattern;
 	}
 }
