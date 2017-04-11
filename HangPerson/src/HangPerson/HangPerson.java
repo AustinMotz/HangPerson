@@ -242,6 +242,17 @@ public class HangPerson {
 		return pattern;
 	}
 	
+	private static String toPattern(String convert, String letter, ArrayList<String> remainingLetters){
+		String pattern = "";
+		for(int i = 0; i < convert.length(); i++) {
+			if(remainingLetters.contains((""+convert.charAt(i)).toUpperCase()))
+				pattern += "_ ";
+			else
+				pattern += convert.charAt(i) + " ";
+		}
+		return pattern;
+	}
+	
 	private static ArrayList<String> getDictionary(int length) throws Exception{
 		Scanner dictionary = new Scanner(new File("Dictionary.txt"));
 		ArrayList<String> words = new ArrayList<String>();
@@ -309,7 +320,12 @@ public class HangPerson {
 		window.repaint();
 	}
 	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
-		
+		String bestPattern = "";
+		int highestNum = 0;
+		for(String pattern: families.keySet()) {
+			ArrayList<String> tempRemaining = (ArrayList<String>) lettersLeft.clone();
+			
+		}
 		return null;
 	}
 }
