@@ -83,7 +83,7 @@ public class HangPerson {
 		man = new ImageIcon("Images\\hangman"+attempt+".png");
 		LMan = new JLabel(man);
 		
-		window.setTitle("Hang Person");
+		window.setTitle("Hang Person 2.0");
 		window.pack();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setVisible(true);
