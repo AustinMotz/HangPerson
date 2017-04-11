@@ -327,21 +327,22 @@ public class HangPerson {
 			HashMap<String, Integer> lettersContained = new HashMap<String, Integer>();
 			int numKeys = 0;
 			int numWords = 0;
+			int lettersInWord = 0;
 			for(String value: families.get(key)) {
 				numWords++;
 				for(int i = 0; i < value.length(); i++) {
 					if(lettersContained.containsKey(""+value.charAt(i)))
 						lettersContained.put(""+value.charAt(i),lettersContained.get(""+value.charAt(i)));
 					else{
-						lettersContained.put(""+value.charAt(i),0);
-						numKeys++;
+						lettersContained.put(""+value.charAt(i),1);
+						lettersInWord++;
 					}
 				}
 			}
-			if(numKeys > highest || (numKeys == highest && highestAvg < (double)numKeys/numWords)){
+			if(numKeys > highest || (numKeys == highest && highestAvg < (double)lettersInWord/numWords)){
 				bestPattern = key;
 				highest = numKeys;
-				highestAvg = (double)numKeys/numWords;
+				highestAvg = (double)lettersInWord/numWords;
 			}
 		}
 		return bestPattern;
