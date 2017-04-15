@@ -54,7 +54,7 @@ public class HangPerson {
 	}
 	
 	private static void photos() throws Exception {
-		man = new ImageIcon("Images\\hangman"+attempt+".png");
+		man = new ImageIcon("./Images/hangman"+attempt+".png");
 		LMan = new JLabel(man);
 		LMan.setBounds(425,20,193,292);
 		panel.add(LMan);
@@ -80,7 +80,7 @@ public class HangPerson {
 		
 		attempt = 0;
 		alphabet = new JButton[26];
-		man = new ImageIcon("Images\\hangman"+attempt+".png");
+		man = new ImageIcon("./Images/hangman"+attempt+".png");
 		LMan = new JLabel(man);
 		
 		window.setTitle("Hang Person 2.0");
