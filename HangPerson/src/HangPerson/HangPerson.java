@@ -132,7 +132,7 @@ public class HangPerson {
 					panel.remove(letter);
 					String theWord = remaining.get(0);
 					remaining = findBestFamily(letter.getText().toLowerCase());
-					System.out.println("Remaining: " + remaining);
+					//System.out.println("Remaining: " + remaining);
 					if(!word.getText().contains(letter.getText().toLowerCase()) && remaining != null)
 						attempt++;
 					updateMan();
@@ -217,7 +217,7 @@ public class HangPerson {
 			families.put(pattern, value);
 		}
 		bestKey = findFamilies(families, letter);
-		System.out.println(bestKey);
+		//System.out.println(bestKey);
 		word.setText(bestKey);
 		return families.get(bestKey);
 	}
