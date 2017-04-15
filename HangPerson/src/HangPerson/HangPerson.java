@@ -324,18 +324,14 @@ public class HangPerson {
 		int highest = 0;
 		double highestAvg = 0;
 		for(String key: families.keySet()) {
-			HashMap<String, Integer> lettersContained = new HashMap<String, Integer>();
 			int numKeys = 0;
 			int numWords = 0;
 			int lettersInWord = 0;
 			for(String value: families.get(key)) {
 				numWords++;
 				for(int i = 0; i < value.length(); i++) {
-					if(lettersContained.containsKey(""+value.charAt(i)))
-						lettersContained.put(""+value.charAt(i),lettersContained.get(""+value.charAt(i)));
-					else{
-						lettersContained.put(""+value.charAt(i),1);
-						lettersInWord++;
+					if(lettersLeft.contains((""+value.charAt(i)).toUpperCase())){
+							lettersInWord++;
 					}
 				}
 			}
