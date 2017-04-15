@@ -83,7 +83,7 @@ public class HangPerson {
 		man = new ImageIcon("Images\\hangman"+attempt+".png");
 		LMan = new JLabel(man);
 		
-		window.setTitle("Hang Person");
+		window.setTitle("Hang Person 2.0");
 		window.pack();
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -130,21 +130,25 @@ public class HangPerson {
 				if(letter.isEnabled()){
 					lettersLeft.remove(letter.getText());
 					panel.remove(letter);
+					String theWord = remaining.get(0);
 					remaining = findBestFamily(letter.getText().toLowerCase());
-					//System.out.println(remaining);
-					if(!word.getText().contains(letter.getText().toLowerCase()))
+					//System.out.println("Remaining: " + remaining);
+					if(!word.getText().contains(letter.getText().toLowerCase()) && remaining != null)
 						attempt++;
 					updateMan();
 					remain.setText("You have " + (maxTries - attempt) + " tries left");
 					if(maxTries - attempt <= 0)
 						lose();
-					else if(!word.getText().contains("_"))
+					else if(!word.getText().contains("_")) {
+						word.setText(theWord);
 						win();
+					}
 					window.revalidate();
 					window.repaint();
 					
 				}}});
 	}
+	
 	
 	private static void updateMan(){
 		panel.remove(LMan);
@@ -214,48 +218,9 @@ public class HangPerson {
 			families.put(pattern, value);
 		}
 		bestKey = findFamilies(families, letter);
+		//System.out.println(bestKey);
 		word.setText(bestKey);
 		return families.get(bestKey);
-	}
-	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
-		String bestKey= "";
-		int highest = 0;
-		ArrayList<String> patterns = new ArrayList<String>();
-		
-		for(String key: families.keySet()){
-			
-			if(families.get(key).size()>highest){
-				bestKey = key;
-				highest = families.get(key).size();
-			} else if(families.get(key).size()==highest) {
-				if(!key.contains(letter)){
-					bestKey = key;
-				}
-			}
-			
-			/*for(String letter: lettersLeft) {
-				String pattern = toPattern(key, letter);
-				if(!patterns.contains(pattern))
-					patterns.add(pattern);
-			}
-			if(patterns.size()>highest) {
-				highest = patterns.size();
-				bestKey = key;				
-			} else if(patterns.size() == highest) {
-				boolean contain = false;
-				for(String let: lettersLeft) {
-					if(key.contains(let))
-						contain = false;
-				}
-				if(!contain)
-					highest = patterns.size();
-				bestKey = key;
-			}
-			System.out.println("Key: "+ key + "patterns: "+patterns);
-			patterns.clear();
-			*/
-		}
-		return bestKey;
 	}
 		
 	private static void inputs() {
@@ -282,6 +247,17 @@ public class HangPerson {
 		return pattern;
 	}
 	
+	private static String toPattern(String convert, String letter, ArrayList<String> remainingLetters){
+		String pattern = "";
+		for(int i = 0; i < convert.length(); i++) {
+			if(remainingLetters.contains((""+convert.charAt(i)).toUpperCase()))
+				pattern += "_ ";
+			else
+				pattern += convert.charAt(i) + " ";
+		}
+		return pattern;
+	}
+	
 	private static ArrayList<String> getDictionary(int length) throws Exception{
 		Scanner dictionary = new Scanner(new File("Dictionary.txt"));
 		ArrayList<String> words = new ArrayList<String>();
@@ -301,10 +277,7 @@ public class HangPerson {
 	private static void again(){
 		play.setBounds(250, 300, 100, 50);
 		panel.add(play);
-		
-		
 		play.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(enter.isEnabled()){
@@ -312,11 +285,9 @@ public class HangPerson {
 					try {
 						play();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				
 			}});
 	}
 	
@@ -327,7 +298,6 @@ public class HangPerson {
 		end.setBounds(300, 50, 300, 300);
 		word.setBounds(200, 250, 200, 50);
 		again();
-		
 		panel.add(end);
 		panel.add(word);
 		window.revalidate();
@@ -347,5 +317,29 @@ public class HangPerson {
 		panel.add(word);
 		window.revalidate();
 		window.repaint();
+	}
+	private static String findFamilies(HashMap<String, ArrayList<String>> families, String letter){
+		String bestPattern = "";
+		int highest = 0;
+		double highestAvg = 0;
+		for(String key: families.keySet()) {
+			int numKeys = 0;
+			int numWords = 0;
+			int lettersInWord = 0;
+			for(String value: families.get(key)) {
+				numWords++;
+				for(int i = 0; i < value.length(); i++) {
+					if(lettersLeft.contains((""+value.charAt(i)).toUpperCase())){
+							lettersInWord++;
+					}
+				}
+			}
+			if(numKeys > highest || (numKeys == highest && highestAvg < (double)lettersInWord/numWords)){
+				bestPattern = key;
+				highest = numKeys;
+				highestAvg = (double)lettersInWord/numWords;
+			}
+		}
+		return bestPattern;
 	}
 }
