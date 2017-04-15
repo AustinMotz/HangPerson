@@ -51,6 +51,8 @@ public class HangPerson {
 		inputs();
 		labels();
 		photos();
+		panel.repaint();
+		panel.revalidate();
 	}
 	
 	private static void photos() throws Exception {
