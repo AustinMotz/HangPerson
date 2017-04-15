@@ -149,6 +149,7 @@ public class HangPerson {
 				}}});
 	}
 	
+	
 	private static void updateMan(){
 		panel.remove(LMan);
 		try {
